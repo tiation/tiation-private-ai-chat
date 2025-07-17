@@ -1,0 +1,44 @@
+title: "Tiation Private AI Chat"
+description: "Private GPT - Ask questions to your documents without an internet connection"
+url: "https://tiation.github.io"
+baseurl: "/tiation-private-ai-chat"
+
+# Theme and plugins
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Site author
+author:
+  name: Tiation Team
+  email: tiatheone@protonmail.com
+
+# Navigation
+header_pages:
+  - README.md
+
+# GitHub repository
+repository: tiation/tiation-private-ai-chat
+github_username: tiation
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  input: GFM
+  hard_wrap: false
+
+# Exclude from processing
+exclude:
+  - .git
+  - .gitignore
+  - .pre-commit-config.yaml
+  - requirements.txt
+  - constants.py
+  - example.env
+  - privateGPT.py
+  - ingest.py
+  - source_documents/
+  - db/

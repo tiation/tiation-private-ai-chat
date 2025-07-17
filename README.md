@@ -132,3 +132,16 @@ If so set your archflags during pip install. eg: _ARCHFLAGS="-arch x86_64" pip3 
 
 # Disclaimer
 This is a test project to validate the feasibility of a fully private solution for question answering using LLMs and Vector embeddings. It is not production ready, and it is not meant to be used in production. The models selection is not optimized for performance, but for privacy; but it is possible to use different models and vectorstores to improve performance.
+
+## 📞 Contact & Support
+
+For questions, enterprise support, or custom deployments:
+
+- **Email**: [tiatheone@protonmail.com](mailto:tiatheone@protonmail.com)
+- **Issues**: [GitHub Issues](https://github.com/tiation/tiation-private-ai-chat/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/tiation/tiation-private-ai-chat/discussions)
+- **Enterprise Support**: Available for custom private AI solutions
+
+---
+
+*Part of the [Tiation](https://github.com/tiation) ecosystem - Enterprise-grade AI solutions*
