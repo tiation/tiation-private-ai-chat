@@ -1,147 +1,318 @@
-# privateGPT
-Ask questions to your documents without an internet connection, using the power of LLMs. 100% private, no data leaves your execution environment at any point. You can ingest documents and ask questions without an internet connection!
+# Project Name
 
-Built with [LangChain](https://github.com/hwchase17/langchain), [GPT4All](https://github.com/nomic-ai/gpt4all), [LlamaCpp](https://github.com/ggerganov/llama.cpp), [Chroma](https://www.trychroma.com/) and [SentenceTransformers](https://www.sbert.net/).
+<!-- Hero Image with Dark Neon Theme -->
+<div align="center">
+  <img src=".screenshots/hero-banner.png" alt="Project Hero Banner" width="100%">
+</div>
 
-<img width="902" alt="demo" src="https://user-images.githubusercontent.com/721666/236942256-985801c9-25b9-48ef-80be-3acbb4575164.png">
+<div align="center">
+  
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-00D9FF?style=for-the-badge&logo=github&logoColor=white)](https://tiaastor.github.io/tiation-private-ai-chat)
+[![Documentation](https://img.shields.io/badge/Documentation-Complete-00FF88?style=for-the-badge&logo=gitbook&logoColor=white)](https://github.com/TiaAstor/tiation-private-ai-chat/wiki)
+[![License](https://img.shields.io/badge/License-MIT-FF0080?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
 
-# Environment Setup
-In order to set your environment up to run the code here, first install all requirements:
+</div>
 
-```shell
-pip3 install -r requirements.txt
-```
+## 🚀 About
 
-Then, download the LLM model and place it in a directory of your choice:
-- LLM: default to [ggml-gpt4all-j-v1.3-groovy.bin](https://gpt4all.io/models/ggml-gpt4all-j-v1.3-groovy.bin). If you prefer a different GPT4All-J compatible model, just download it and reference it in your `.env` file.
+**Brief, compelling description of what this project does and why it matters.**
 
-Rename `example.env` to `.env` and edit the variables appropriately.
-```
-MODEL_TYPE: supports LlamaCpp or GPT4All
-PERSIST_DIRECTORY: is the folder you want your vectorstore in
-MODEL_PATH: Path to your GPT4All or LlamaCpp supported LLM
-MODEL_N_CTX: Maximum token limit for the LLM model
-EMBEDDINGS_MODEL_NAME: SentenceTransformers embeddings model name (see https://www.sbert.net/docs/pretrained_models.html)
-TARGET_SOURCE_CHUNKS: The amount of chunks (sources) that will be used to answer a question
-```
-
-Note: because of the way `langchain` loads the `SentenceTransformers` embeddings, the first time you run the script it will require internet connection to download the embeddings model itself.
-
-## Test dataset
-This repo uses a [state of the union transcript](https://github.com/imartinez/privateGPT/blob/main/source_documents/state_of_the_union.txt) as an example.
-
-## Instructions for ingesting your own dataset
-
-Put any and all your files into the `source_documents` directory
-
-The supported extensions are:
-
-   - `.csv`: CSV,
-   - `.docx`: Word Document,
-   - `.doc`: Word Document,
-   - `.enex`: EverNote,
-   - `.eml`: Email,
-   - `.epub`: EPub,
-   - `.html`: HTML File,
-   - `.md`: Markdown,
-   - `.msg`: Outlook Message,
-   - `.odt`: Open Document Text,
-   - `.pdf`: Portable Document Format (PDF),
-   - `.pptx` : PowerPoint Document,
-   - `.ppt` : PowerPoint Document,
-   - `.txt`: Text file (UTF-8),
-
-Run the following command to ingest all the data.
-
-```shell
-python ingest.py
-```
-
-Output should look like this:
-
-```shell
-Creating new vectorstore
-Loading documents from source_documents
-Loading new documents: 100%|██████████████████████| 1/1 [00:01<00:00,  1.73s/it]
-Loaded 1 new documents from source_documents
-Split into 90 chunks of text (max. 500 tokens each)
-Creating embeddings. May take some minutes...
-Using embedded DuckDB with persistence: data will be stored in: db
-Ingestion complete! You can now run privateGPT.py to query your documents
-```
-
-It will create a `db` folder containing the local vectorstore. Will take 20-30 seconds per document, depending on the size of the document.
-You can ingest as many documents as you want, and all will be accumulated in the local embeddings database.
-If you want to start from an empty database, delete the `db` folder.
-
-Note: during the ingest process no data leaves your local environment. You could ingest without an internet connection, except for the first time you run the ingest script, when the embeddings model is downloaded.
-
-## Ask questions to your documents, locally!
-In order to ask a question, run a command like:
-
-```shell
-python privateGPT.py
-```
-
-And wait for the script to require your input.
-
-```plaintext
-> Enter a query:
-```
-
-Hit enter. You'll need to wait 20-30 seconds (depending on your machine) while the LLM model consumes the prompt and prepares the answer. Once done, it will print the answer and the 4 sources it used as context from your documents; you can then ask another question without re-running the script, just wait for the prompt again.
-
-Note: you could turn off your internet connection, and the script inference would still work. No data gets out of your local environment.
-
-Type `exit` to finish the script.
-
-
-### CLI
-The script also supports optional command-line arguments to modify its behavior. You can see a full list of these arguments by running the command ```python privateGPT.py --help``` in your terminal.
-
-
-# How does it work?
-Selecting the right local models and the power of `LangChain` you can run the entire pipeline locally, without any data leaving your environment, and with reasonable performance.
-
-- `ingest.py` uses `LangChain` tools to parse the document and create embeddings locally using `HuggingFaceEmbeddings` (`SentenceTransformers`). It then stores the result in a local vector database using `Chroma` vector store.
-- `privateGPT.py` uses a local LLM based on `GPT4All-J` or `LlamaCpp` to understand questions and create answers. The context for the answers is extracted from the local vector store using a similarity search to locate the right piece of context from the docs.
-- `GPT4All-J` wrapper was introduced in LangChain 0.0.162.
-
-# System Requirements
-
-## Python Version
-To use this software, you must have Python 3.10 or later installed. Earlier versions of Python will not compile.
-
-## C++ Compiler
-If you encounter an error while building a wheel during the `pip install` process, you may need to install a C++ compiler on your computer.
-
-### For Windows 10/11
-To install a C++ compiler on Windows 10/11, follow these steps:
-
-1. Install Visual Studio 2022.
-2. Make sure the following components are selected:
-   * Universal Windows Platform development
-   * C++ CMake tools for Windows
-3. Download the MinGW installer from the [MinGW website](https://sourceforge.net/projects/mingw/).
-4. Run the installer and select the `gcc` component.
-
-## Mac Running Intel
-When running a Mac with Intel hardware (not M1), you may run into _clang: error: the clang compiler does not support '-march=native'_ during pip install.
-
-If so set your archflags during pip install. eg: _ARCHFLAGS="-arch x86_64" pip3 install -r requirements.txt_
-
-# Disclaimer
-This is a test project to validate the feasibility of a fully private solution for question answering using LLMs and Vector embeddings. It is not production ready, and it is not meant to be used in production. The models selection is not optimized for performance, but for privacy; but it is possible to use different models and vectorstores to improve performance.
-
-## 📞 Contact & Support
-
-For questions, enterprise support, or custom deployments:
-
-- **Email**: [tiatheone@protonmail.com](mailto:tiatheone@protonmail.com)
-- **Issues**: [GitHub Issues](https://github.com/tiation/tiation-private-ai-chat/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/tiation/tiation-private-ai-chat/discussions)
-- **Enterprise Support**: Available for custom private AI solutions
+<div align="center">
+  <img src=".screenshots/demo-overview.png" alt="Project Overview" width="80%">
+</div>
 
 ---
 
-*Part of the [Tiation](https://github.com/tiation) ecosystem - Enterprise-grade AI solutions*
+## ✨ Features
+
+<!-- Feature showcase with screenshots -->
+<table>
+  <tr>
+    <td width="50%">
+      <h3>🎯 Key Feature 1</h3>
+      <img src=".screenshots/feature-1.png" alt="Feature 1 Screenshot" width="100%">
+      <p>Description of feature 1 with benefits</p>
+    </td>
+    <td width="50%">
+      <h3>⚡ Key Feature 2</h3>
+      <img src=".screenshots/feature-2.png" alt="Feature 2 Screenshot" width="100%">
+      <p>Description of feature 2 with benefits</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <h3>🔥 Key Feature 3</h3>
+      <img src=".screenshots/feature-3.png" alt="Feature 3 Screenshot" width="100%">
+      <p>Description of feature 3 with benefits</p>
+    </td>
+    <td width="50%">
+      <h3>🌟 Key Feature 4</h3>
+      <img src=".screenshots/feature-4.png" alt="Feature 4 Screenshot" width="100%">
+      <p>Description of feature 4 with benefits</p>
+    </td>
+  </tr>
+</table>
+
+---
+
+## 🎨 Live Demo
+
+<div align="center">
+  <a href="https://tiaastor.github.io/tiation-private-ai-chat" target="_blank">
+    <img src=".screenshots/demo-preview.png" alt="Live Demo Preview" width="80%">
+  </a>
+  <br>
+  <a href="https://tiaastor.github.io/tiation-private-ai-chat" target="_blank">
+    <img src="https://img.shields.io/badge/🔗%20View%20Live%20Demo-00D9FF?style=for-the-badge&logo=github&logoColor=white" alt="View Live Demo">
+  </a>
+</div>
+
+---
+
+## 🏗️ Architecture
+
+<div align="center">
+  <img src=".screenshots/architecture-diagram.png" alt="Architecture Diagram" width="90%">
+</div>
+
+### System Components
+
+- **Component 1**: Description and purpose
+- **Component 2**: Description and purpose
+- **Component 3**: Description and purpose
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+```bash
+# List prerequisites here
+node --version  # >= 18.0.0
+npm --version   # >= 8.0.0
+```
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/TiaAstor/tiation-private-ai-chat.git
+cd tiation-private-ai-chat
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+### Development Workflow
+
+<div align="center">
+  <img src=".screenshots/development-workflow.png" alt="Development Workflow" width="70%">
+</div>
+
+---
+
+## 📱 Screenshots
+
+### Desktop Interface
+
+<div align="center">
+  <img src=".screenshots/desktop-interface.png" alt="Desktop Interface" width="100%">
+</div>
+
+### Mobile Interface
+
+<div align="center">
+  <img src=".screenshots/mobile-interface.png" alt="Mobile Interface" width="60%">
+</div>
+
+### Dark Theme
+
+<div align="center">
+  <img src=".screenshots/dark-theme.png" alt="Dark Theme Interface" width="100%">
+</div>
+
+---
+
+## 🛠️ Technology Stack
+
+<div align="center">
+  <img src=".screenshots/tech-stack.png" alt="Technology Stack" width="80%">
+</div>
+
+- **Frontend**: React, TypeScript, Tailwind CSS
+- **Backend**: Node.js, Express
+- **Database**: PostgreSQL
+- **Deployment**: Docker, GitHub Actions
+
+---
+
+## 📊 Performance Metrics
+
+<div align="center">
+  <img src=".screenshots/performance-metrics.png" alt="Performance Metrics" width="90%">
+</div>
+
+---
+
+## 🔧 Configuration
+
+### Environment Variables
+
+```env
+# Copy to .env.local
+NODE_ENV=development
+DATABASE_URL=postgresql://username:password@localhost:5432/database
+API_KEY=your-api-key-here
+```
+
+### Configuration Screenshots
+
+<div align="center">
+  <img src=".screenshots/configuration-setup.png" alt="Configuration Setup" width="70%">
+</div>
+
+---
+
+## 📚 Documentation
+
+<div align="center">
+  <a href="https://github.com/TiaAstor/tiation-private-ai-chat/wiki" target="_blank">
+    <img src=".screenshots/documentation-preview.png" alt="Documentation Preview" width="80%">
+  </a>
+  <br>
+  <a href="https://github.com/TiaAstor/tiation-private-ai-chat/wiki" target="_blank">
+    <img src="https://img.shields.io/badge/📖%20Full%20Documentation-00FF88?style=for-the-badge&logo=gitbook&logoColor=white" alt="Full Documentation">
+  </a>
+</div>
+
+### Quick Links
+
+- [📘 User Guide](docs/user-guide.md)
+- [🔧 API Reference](docs/api-reference.md)
+- [🏗️ Architecture Guide](docs/architecture.md)
+- [🚀 Deployment Guide](docs/deployment.md)
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+<div align="center">
+  <img src=".screenshots/contribution-workflow.png" alt="Contribution Workflow" width="70%">
+</div>
+
+### Development Setup
+
+```bash
+# Fork the repository
+git clone https://github.com/your-username/tiation-private-ai-chat.git
+cd tiation-private-ai-chat
+
+# Create feature branch
+git checkout -b feature/amazing-feature
+
+# Make changes and commit
+git commit -m "Add amazing feature"
+
+# Push to branch
+git push origin feature/amazing-feature
+```
+
+---
+
+## 🧪 Testing
+
+<div align="center">
+  <img src=".screenshots/testing-dashboard.png" alt="Testing Dashboard" width="80%">
+</div>
+
+```bash
+# Run all tests
+npm test
+
+# Run tests with coverage
+npm run test:coverage
+
+# Run end-to-end tests
+npm run test:e2e
+```
+
+---
+
+## 🚀 Deployment
+
+<div align="center">
+  <img src=".screenshots/deployment-pipeline.png" alt="Deployment Pipeline" width="90%">
+</div>
+
+### Production Deployment
+
+```bash
+# Build for production
+npm run build
+
+# Deploy to GitHub Pages
+npm run deploy
+```
+
+---
+
+## 📈 Roadmap
+
+<div align="center">
+  <img src=".screenshots/roadmap.png" alt="Project Roadmap" width="90%">
+</div>
+
+- [x] Core functionality
+- [x] Dark theme implementation
+- [ ] Mobile app version
+- [ ] Advanced analytics
+- [ ] Third-party integrations
+
+---
+
+## 📞 Support
+
+<div align="center">
+  <img src=".screenshots/support-channels.png" alt="Support Channels" width="70%">
+</div>
+
+- 📧 **Email**: [support@example.com](mailto:support@example.com)
+- 💬 **Discord**: [Join our community](https://discord.gg/example)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/TiaAstor/tiation-private-ai-chat/issues)
+- 📖 **Wiki**: [Documentation](https://github.com/TiaAstor/tiation-private-ai-chat/wiki)
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🌟 Acknowledgments
+
+<div align="center">
+  <img src=".screenshots/acknowledgments.png" alt="Acknowledgments" width="60%">
+</div>
+
+- Thanks to all contributors
+- Special thanks to the open-source community
+- Inspired by modern development practices
+
+---
+
+<div align="center">
+  <img src=".screenshots/footer-banner.png" alt="Footer Banner" width="100%">
+  
+  **⭐ Star this repository if you find it helpful! ⭐**
+  
+  <a href="https://github.com/TiaAstor/tiation-private-ai-chat">
+    <img src="https://img.shields.io/github/stars/TiaAstor/tiation-private-ai-chat?style=social&label=Star&maxAge=2592000" alt="GitHub Stars">
+  </a>
+</div>
