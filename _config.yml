@@ -1,47 +1,110 @@
-title: "Tiation Private AI Chat"
-description: "Private GPT - Ask questions to your documents without an internet connection"
-url: "https://tiation.github.io"
+# GitHub Pages Configuration for tiation-private-ai-chat
+# Dark Neon Theme with Cyan Gradient Flares
+
+title: "tiation private ai chat"
+description: "Enterprise-grade solution with professional documentation and dark neon theme"
 baseurl: "/tiation-private-ai-chat"
+url: "https://tiaastor.github.io"
 
-# Theme and plugins
-theme: minima
-
-# Dark neon theme configuration
-color_scheme: dark
+# Theme Configuration
+theme: jekyll-theme-cayman
 plugins:
-  - jekyll-feed
   - jekyll-sitemap
   - jekyll-seo-tag
+  - jekyll-feed
 
-# Site author
+# SEO and Social
 author:
-  name: Tiation Team
-  email: tiatheone@protonmail.com
+  name: "Tia Astor"
+  email: "tia@tiation.com"
+  github: "TiaAstor"
+
+social:
+  github: "TiaAstor"
+  twitter: "TiaAstor"
+
+# GitHub Pages Settings
+repository: "TiaAstor/tiation-private-ai-chat"
+github_username: "TiaAstor"
 
 # Navigation
-header_pages:
-  - README.md
+navigation:
+  - title: "Home"
+    url: "/"
+  - title: "Documentation"
+    url: "/docs/"
+  - title: "API Reference"
+    url: "/api/"
+  - title: "GitHub"
+    url: "https://github.com/TiaAstor/tiation-private-ai-chat"
 
-# GitHub repository
-repository: tiation/tiation-private-ai-chat
-github_username: tiation
-
-# Build settings
+# Markdown Settings
 markdown: kramdown
-highlighter: rouge
 kramdown:
-  input: GFM
-  hard_wrap: false
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: 'highlight'
+    span:
+      line_numbers: false
+    block:
+      line_numbers: true
 
 # Exclude from processing
 exclude:
-  - .git
-  - .gitignore
-  - .pre-commit-config.yaml
-  - requirements.txt
-  - constants.py
-  - example.env
-  - privateGPT.py
-  - ingest.py
-  - source_documents/
-  - db/
+  - node_modules/
+  - vendor/
+  - .bundle/
+  - .sass-cache/
+  - .jekyll-cache/
+  - gemfiles/
+  - Gemfile
+  - Gemfile.lock
+  - README_OLD.md
+  - scripts/
+  - .git/
+  - .github/
+
+# Include
+include:
+  - .htaccess
+  - _pages
+  - docs/
+  - api/
+
+# Collections
+collections:
+  docs:
+    output: true
+    permalink: /:collection/:name/
+  examples:
+    output: true
+    permalink: /:collection/:name/
+
+# Default settings
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+      author: "Tia Astor"
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      author: "Tia Astor"
+  - scope:
+      path: ""
+      type: "docs"
+    values:
+      layout: "doc"
+      nav: true
+
+# Custom variables
+custom:
+  theme_color: "#00D9FF"
+  accent_color: "#FF0080"
+  background_color: "#0A0A0A"
+  text_color: "#FFFFFF"
+  highlight_color: "#00FF88"
